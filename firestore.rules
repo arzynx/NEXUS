@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function signedIn() { return request.auth != null; }
+    function roleDoc() { return get(/databases/$(db)/documents/roles/$(request.auth.token.email)); }
+    function isOrganizer() { return signedIn() && exists(/databases/$(db)/documents/roles/$(request.auth.token.email)); }
+    function isAdmin() { return isOrganizer() && roleDoc().data.role == 'admin'; }
+    function ownsEvent(eid) { return signedIn() && get(/databases/$(db)/documents/events/$(eid)).data.organizerUid == request.auth.uid; }
+
+    match /roles/{email} { allow get: if signedIn() && request.auth.token.email == email; }
+    match /users/{uid} { allow read, write: if signedIn() && request.auth.uid == uid; }
+    match /events/{id} {
+      allow read: if true;
+      allow create: if isOrganizer() && request.resource.data.organizerUid == request.auth.uid;
+      allow update, delete: if signedIn() && (resource.data.organizerUid == request.auth.uid || isAdmin());
+    }
+    match /registrations/{rid} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid
+        && rid == request.resource.data.eventId + '_' + request.auth.uid
+        && request.resource.data.status == 'pending'
+        && !('ticketCode' in request.resource.data);
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || ownsEvent(resource.data.eventId) || isAdmin());
+      allow update: if signedIn() && (ownsEvent(resource.data.eventId) || isAdmin());
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid && resource.data.status == 'pending';
+    }
+  }
+}

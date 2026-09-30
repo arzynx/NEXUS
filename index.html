@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-IN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Nexus brings every UIT RGPV Bhopal event into one place.">
+  <title>Nexus · UIT RGPV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930-final-2">
+  <link rel="stylesheet" href="css/nexus-refresh.css?v=20260930-final-3">
+  <link rel="icon" href="assets/nexus-mark.svg?v=20260930-neon">
+  <script>
+    (function () {
+      var saved = localStorage.getItem('nexus-theme') || 'dark';
+      document.documentElement.dataset.theme = saved;
+      document.documentElement.style.colorScheme = saved;
+      document.querySelector('meta[name="theme-color"]').content = saved === 'dark' ? '#000000' : '#FFFFFF';
+    }());
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script defer src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#app-main">Skip to content</a>
+  <header class="site-header" id="site-header"></header>
+  <main id="app-main" tabindex="-1"></main>
+  <nav class="mobile-nav" aria-label="Main navigation" id="mobile-nav"></nav>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="app-dialog"></dialog>
+  <script type="module" src="js/app.js?v=20260930-final-2"></script>
+</body>
+</html>
